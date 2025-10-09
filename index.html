@@ -35,62 +35,68 @@
     .addRecordBtn:hover {
       background-color: #005a87;
     }
+
+    /* Make the basemap gallery smaller */
+    .esri-basemap-gallery {
+      transform: scale(0.8);
+      transform-origin: bottom left;
+    }
+
+    .esri-basemap-gallery__item {
+      margin: 2px !important;
+    }
+
+    .esri-basemap-gallery__item-thumbnail {
+      width: 80px !important;
+      height: 60px !important;
+    }
   </style>
 
   <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.26/"></script>
 
   <script>
-    //Sets required features for the map.
     require([
-      "esri/Map",
+      "esri/WebMap",
       "esri/views/MapView",
       "esri/widgets/Locate",
-      "esri/widgets/Search",
-      "esri/layers/FeatureLayer"
-    ], (Map, MapView, Locate, Search, FeatureLayer) => {
+      "esri/widgets/BasemapGallery",
+      "esri/widgets/Expand",
+      "esri/widgets/Search"
+    ], (WebMap, MapView, Locate, BasemapGallery, Expand, Search) => {
 
-      //Creates the basemap for viewing.
-      const map = new Map({
-        basemap: "satellite"
-      });
-
-      //Centers the map and zooms to the area of interest.
-      const view = new MapView({
-        container: "viewDiv",
-        center: [-93.19, 45.19],
-        zoom: 16,
-        map: map
-      });
-
-      //Adds the locate button to determine your exact location.
-      const locateBtn = new Locate({ view: view });
-      view.ui.add(locateBtn, "top-left");
-
-      //Adds the dotted features to the map.
-      const layer = new FeatureLayer({
-        url: "https://services.arcgis.com/HRPe58bUyBqyyiCt/arcgis/rest/services/survey123_02409e346d814a9ba417e4922f8e675e_results/FeatureServer/0",
-        outFields: ["*"],
-        renderer: {
-          type: "simple",
-          symbol: {
-            type: "simple-marker",
-            color: "red",
-            size: 8
-          }
+      // ✅ Load your existing AGOL web map by ID
+      const webmap = new WebMap({
+        portalItem: {
+          id: "a0f0490dbc424343afca455b49ace253" // <-- your map ID
         }
       });
 
-      //Adds the layer to the map.
-      map.add(layer);
-
-      //Adds the search widget to the map.
-      const searchWidget = new Search({ view: view });
-      view.ui.add(searchWidget, {
-        position: "bottom-right",
-        index: 2
+      // Set up the view
+      const view = new MapView({
+        container: "viewDiv",
+        map: webmap
       });
 
+      // Add a locate widget
+      const locateBtn = new Locate({ view });
+      view.ui.add(locateBtn, "top-left");
+
+      // Add a basemap gallery inside an Expand widget
+      const basemapGallery = new BasemapGallery({ view });
+
+      const bgExpand = new Expand({
+        view,
+        content: basemapGallery,
+        expandIcon: "basemap", // icon for the button
+        expandTooltip: "Change basemap"
+      });
+
+      view.ui.add(bgExpand, "bottom-left");
+
+      // Add a search widget
+      const searchWidget = new Search({ view });
+      view.ui.add(searchWidget, "bottom-right");
     });
   </script>
 </head>
