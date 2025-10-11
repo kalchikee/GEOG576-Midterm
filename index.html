@@ -4,7 +4,6 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-
   <title>Data Collector for AGOL</title>
 
   <style>
@@ -36,6 +35,35 @@
       background-color: #005a87;
     }
 
+    #searchDiv {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      width: 300px;
+      transition: all 0.3s ease;
+    }
+
+    @media (max-width: 600px) {
+      #searchDiv {
+        top: 60px;
+        /* move down so it doesn't overlap the Add Record button */
+        width: 80%;
+        /* make it fit the smaller screen */
+        left: 10%;
+        transform: none;
+        /* disable horizontal centering trick */
+      }
+
+      .addRecordBtn {
+        top: 10px;
+        right: 10px;
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+    }
+
     /* Make the basemap gallery smaller */
     .esri-basemap-gallery {
       transform: scale(0.8);
@@ -62,47 +90,66 @@
       "esri/widgets/Locate",
       "esri/widgets/BasemapGallery",
       "esri/widgets/Expand",
-      "esri/widgets/Search"
-    ], (WebMap, MapView, Locate, BasemapGallery, Expand, Search) => {
+      "esri/widgets/Search",
+      "esri/widgets/Legend"
+    ], (WebMap, MapView, Locate, BasemapGallery, Expand, Search, Legend) => {
 
-      // ✅ Load your existing AGOL web map by ID
       const webmap = new WebMap({
         portalItem: {
           id: "a0f0490dbc424343afca455b49ace253" // <-- your map ID
         }
       });
 
-      // Set up the view
       const view = new MapView({
         container: "viewDiv",
         map: webmap
       });
 
-      // Add a locate widget
       const locateBtn = new Locate({ view });
       view.ui.add(locateBtn, "top-left");
 
-      // Add a basemap gallery inside an Expand widget
       const basemapGallery = new BasemapGallery({ view });
-
       const bgExpand = new Expand({
         view,
         content: basemapGallery,
-        expandIcon: "basemap", // icon for the button
+        expandIcon: "basemap",
         expandTooltip: "Change basemap"
       });
+      view.ui.add(bgExpand, "bottom-right");
 
-      view.ui.add(bgExpand, "bottom-left");
+      const searchWidget = new Search({
+        view: view,
+        container: "searchDiv" // attach directly to your custom div
+      });
 
-      // Add a search widget
-      const searchWidget = new Search({ view });
-      view.ui.add(searchWidget, "bottom-right");
+      // ✅ Simplified one-page legend
+      const legend = new Legend({
+        view: view,
+        style: "classic", // ensures everything is visible on one page
+        respectLayerVisibility: true
+      });
+
+      const legendExpand = new Expand({
+        view: view,
+        content: legend,
+        expandIcon: "legend",
+        expandTooltip: "Map Legend",
+        expanded: true
+      });
+      view.ui.add(legendExpand, "bottom-left");
+
+      view.when(() => {
+        webmap.loadAll().then(() => {
+          webmap.layers.forEach(layer => (layer.visible = true));
+        });
+      });
     });
   </script>
 </head>
 
 <body>
   <a href="https://arcg.is/4qSHW" target="_blank" class="addRecordBtn">Add Record</a>
+  <div id="searchDiv"></div>
   <div id="viewDiv"></div>
 </body>
 
