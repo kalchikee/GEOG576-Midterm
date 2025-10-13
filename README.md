@@ -1,0 +1,1 @@
+This is a sample for the My Nature Diary. Due to time constraints, I could only gather trail data for the US National Parks and Minnesota State Parks. Future endeavors would include adding more trail data from other states and countries.
