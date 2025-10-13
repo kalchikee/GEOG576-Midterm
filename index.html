@@ -4,9 +4,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>Data Collector for AGOL</title>
+  <title>My Nature Diary</title>
 
   <style>
+    /*General styling for the app.*/
     html,
     body,
     #viewDiv {
@@ -16,6 +17,7 @@
       width: 100%;
     }
 
+    /*Add Record Button.*/
     .addRecordBtn {
       position: absolute;
       z-index: 10;
@@ -35,6 +37,7 @@
       background-color: #005a87;
     }
 
+    /*Custom positioning for the search widget.*/
     #searchDiv {
       position: absolute;
       top: 10px;
@@ -45,15 +48,13 @@
       transition: all 0.3s ease;
     }
 
+    /*Adjustments for mobile users/smaller screens.*/
     @media (max-width: 600px) {
       #searchDiv {
         top: 60px;
-        /* move down so it doesn't overlap the Add Record button */
         width: 80%;
-        /* make it fit the smaller screen */
         left: 10%;
         transform: none;
-        /* disable horizontal centering trick */
       }
 
       .addRecordBtn {
@@ -64,22 +65,23 @@
       }
     }
 
-    /* Make the basemap gallery smaller */
-    .esri-basemap-gallery {
-      transform: scale(0.8);
-      transform-origin: bottom left;
-    }
-
-    .esri-basemap-gallery__item {
-      margin: 2px !important;
-    }
-
-    .esri-basemap-gallery__item-thumbnail {
-      width: 80px !important;
-      height: 60px !important;
+    /*Styling for coordinates display.*/
+    #coords {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 13px;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
     }
   </style>
 
+  <!-- ArcGIS API for JavaScript -->
   <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.26/"></script>
 
@@ -91,23 +93,33 @@
       "esri/widgets/BasemapGallery",
       "esri/widgets/Expand",
       "esri/widgets/Search",
-      "esri/widgets/Legend"
-    ], (WebMap, MapView, Locate, BasemapGallery, Expand, Search, Legend) => {
+      "esri/widgets/Legend",
+      "esri/layers/FeatureLayer"
+    ], (
+      WebMap, MapView, Locate, BasemapGallery, Expand, Search, Legend, FeatureLayer
+    ) => {
 
+      //Loads the web map from ArcGIS Online.
       const webmap = new WebMap({
-        portalItem: {
-          id: "a0f0490dbc424343afca455b49ace253" // <-- your map ID
-        }
+        portalItem: { id: "a0f0490dbc424343afca455b49ace253" } 
       });
 
+      //Set basemap imagery.
+      webmap.basemap = "hybrid";
+
+      //Create the MapView.
       const view = new MapView({
         container: "viewDiv",
-        map: webmap
+        map: webmap,
+        center: [-98.35, 39.5], 
+        zoom: 5
       });
 
+      //Adds a locate button to the map.
       const locateBtn = new Locate({ view });
       view.ui.add(locateBtn, "top-left");
 
+      //Adds an expandable basemap gallery to the map.
       const basemapGallery = new BasemapGallery({ view });
       const bgExpand = new Expand({
         view,
@@ -117,18 +129,18 @@
       });
       view.ui.add(bgExpand, "bottom-right");
 
+      //Adds a search widget to the map.
       const searchWidget = new Search({
         view: view,
-        container: "searchDiv" // attach directly to your custom div
+        container: "searchDiv"
       });
 
-      // ✅ Simplified one-page legend
+      //Adds a legend to the map.
       const legend = new Legend({
         view: view,
-        style: "classic", // ensures everything is visible on one page
+        style: "classic",
         respectLayerVisibility: true
       });
-
       const legendExpand = new Expand({
         view: view,
         content: legend,
@@ -138,6 +150,16 @@
       });
       view.ui.add(legendExpand, "bottom-left");
 
+      //Show coordinates where users hover on the map.
+      const coordsDiv = document.getElementById("coords");
+      view.on("pointer-move", function (evt) {
+        const point = view.toMap({ x: evt.x, y: evt.y });
+        if (point) {
+          coordsDiv.innerHTML = `Lon: ${point.longitude.toFixed(4)} | Lat: ${point.latitude.toFixed(4)}`;
+        }
+      });
+
+      //Makes sure all layers load before they are visible.
       view.when(() => {
         webmap.loadAll().then(() => {
           webmap.layers.forEach(layer => (layer.visible = true));
@@ -151,6 +173,7 @@
   <a href="https://arcg.is/4qSHW" target="_blank" class="addRecordBtn">Add Record</a>
   <div id="searchDiv"></div>
   <div id="viewDiv"></div>
+  <div id="coords">Lon: 0.0000 | Lat: 0.0000</div>
 </body>
 
 </html>
