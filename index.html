@@ -23,18 +23,31 @@
       z-index: 10;
       top: 10px;
       right: 10px;
-      background-color: #0079c1;
+      background: linear-gradient(135deg, #4CAF50, #45a049);
       color: white;
-      padding: 8px 16px;
+      padding: 10px 18px;
       border: none;
-      border-radius: 4px;
+      border-radius: 25px;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
       text-decoration: none;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .addRecordBtn:hover {
-      background-color: #005a87;
+      background: linear-gradient(135deg, #45a049, #3d8b40);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .addRecordBtn:before {
+      content: "✏️";
+      font-size: 16px;
     }
 
     /*Custom positioning for the search widget.*/
@@ -63,21 +76,320 @@
         font-size: 12px;
         padding: 6px 12px;
       }
+
+      #sidebar {
+        width: 100%;
+        right: -100%;
+      }
+
+      #sidebar-toggle {
+        top: 120px;
+        right: 10px;
+        font-size: 12px;
+        padding: 6px 10px;
+      }
+
+      #sidebar-toggle.sidebar-open {
+        right: 10px;
+        top: 10px;
+      }
+
+      #welcome-content {
+        margin: 20px;
+        padding: 20px;
+      }
+
+      .modal-header {
+        font-size: 20px;
+      }
+    }
+
+    /*Custom popup styling.*/
+    .popup-content {
+      font-family: Arial, sans-serif;
+    }
+
+    .popup-section {
+      margin-bottom: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .popup-section:last-child {
+      border-bottom: none;
     }
 
     /*Styling for coordinates display.*/
     #coords {
       position: absolute;
-      bottom: 10px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 10;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 6px 12px;
-      border-radius: 4px;
-      font-family: monospace;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2c3e50;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    #coords:before {
+      content: "🌍 ";
+      margin-right: 6px;
+    }
+
+    /*Sidebar styling for recent entries.*/
+    #sidebar {
+      position: absolute;
+      top: 0;
+      right: -320px;
+      width: 320px;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+      z-index: 15;
+      transition: right 0.3s ease;
+      box-shadow: -4px 0 20px rgba(0, 0, 0, 0.15);
+      overflow-y: auto;
+      backdrop-filter: blur(10px);
+    }
+
+    #sidebar.open {
+      right: 0;
+    }
+
+    #sidebar-toggle {
+      position: absolute;
+      top: 70px;
+      right: 10px;
+      z-index: 16;
+      background: linear-gradient(135deg, #2196F3, #1976D2);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 10px 15px;
+      cursor: pointer;
       font-size: 13px;
-      box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 12px rgba(33, 150, 243, 0.3);
+    }
+
+    #sidebar-toggle.sidebar-open {
+      right: 340px;
+    }
+
+    #sidebar-toggle:hover {
+      background: linear-gradient(135deg, #1976D2, #1565C0);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 15px rgba(33, 150, 243, 0.4);
+    }
+
+    #sidebar-header {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      padding: 20px 15px;
+      font-size: 16px;
+      font-weight: 700;
+      border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+    }
+
+    #sidebar-header:before {
+      content: "🌿";
+      margin-right: 8px;
+      font-size: 18px;
+    }
+
+    #sidebar-content {
+      padding: 0;
+    }
+
+    .entry-item {
+      border-bottom: 1px solid #f0f0f0;
+      padding: 18px 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      margin: 0 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    .entry-item:hover {
+      background: linear-gradient(135deg, rgba(33, 150, 243, 0.05), rgba(25, 118, 210, 0.08));
+      transform: translateX(-5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .entry-title {
+      font-weight: 700;
+      color: #2E7D32;
+      margin-bottom: 8px;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .entry-date {
+      color: #666;
+      font-size: 11px;
+      margin-bottom: 8px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .entry-date:before {
+      content: "📅 ";
+      margin-right: 4px;
+    }
+
+    .entry-description {
+      color: #555;
+      font-size: 13px;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px 20px;
+      color: #666;
+      font-weight: 500;
+    }
+
+    .loading:before {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #4CAF50;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /*Welcome modal styling.*/
+    #welcome-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(33, 150, 243, 0.1)), 
+                  radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.8));
+      z-index: 20;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+    }
+
+    #welcome-content {
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+      padding: 35px;
+      border-radius: 20px;
+      max-width: 520px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: modalSlideIn 0.5s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .modal-header {
+      color: #2E7D32;
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      text-align: center;
+      background: linear-gradient(135deg, #4CAF50, #2E7D32);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .modal-header:before {
+      content: "🌲";
+      margin-right: 10px;
+      font-size: 28px;
+    }
+
+    .modal-content {
+      line-height: 1.7;
+      margin-bottom: 25px;
+      color: #2c3e50;
+    }
+
+    .modal-content ul {
+      margin: 15px 0;
+      padding-left: 0;
+    }
+
+    .modal-content li {
+      list-style: none;
+      margin-bottom: 10px;
+      padding-left: 0;
+      font-weight: 500;
+    }
+
+    .modal-buttons {
+      text-align: center;
+      gap: 12px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .modal-btn {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin: 0 6px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+    }
+
+    .modal-btn:hover {
+      background: linear-gradient(135deg, #45a049, #3d8b40);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .modal-btn.secondary {
+      background: linear-gradient(135deg, #757575, #616161);
+      box-shadow: 0 4px 15px rgba(117, 117, 117, 0.3);
+    }
+
+    .modal-btn.secondary:hover {
+      background: linear-gradient(135deg, #616161, #424242);
+      box-shadow: 0 6px 20px rgba(117, 117, 117, 0.4);
     }
   </style>
 
@@ -138,15 +450,42 @@
       //Adds a legend to the map.
       const legend = new Legend({
         view: view,
-        style: "classic",
-        respectLayerVisibility: true
+        style: "card",
+        respectLayerVisibility: true,
+        container: document.createElement("div")
       });
+      
+      // Create a custom legend container with enhanced styling
+      const legendContainer = document.createElement("div");
+      legendContainer.style.cssText = `
+        background: white;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        max-width: 250px;
+        border: 2px solid #0079c1;
+      `;
+      
+      const legendTitle = document.createElement("div");
+      legendTitle.innerHTML = "🗺️ Map Legend";
+      legendTitle.style.cssText = `
+        font-weight: bold;
+        color: #0079c1;
+        margin-bottom: 10px;
+        font-size: 14px;
+        text-align: center;
+      `;
+      
+      legendContainer.appendChild(legendTitle);
+      legendContainer.appendChild(legend.container);
+      
       const legendExpand = new Expand({
         view: view,
-        content: legend,
+        content: legendContainer,
         expandIcon: "legend",
-        expandTooltip: "Map Legend",
-        expanded: true
+        expandTooltip: "Show Map Legend",
+        expanded: false,
+        group: "bottom-left"
       });
       view.ui.add(legendExpand, "bottom-left");
 
@@ -162,7 +501,157 @@
       //Makes sure all layers load before they are visible.
       view.when(() => {
         webmap.loadAll().then(() => {
-          webmap.layers.forEach(layer => (layer.visible = true));
+          webmap.layers.forEach(layer => {
+            layer.visible = true;
+          });
+          
+          // Load recent entries for sidebar
+          window.loadRecentEntries();
+        });
+      });
+
+      // Function to load recent entries
+      window.loadRecentEntries = function() {
+        const sidebarContent = document.getElementById("sidebar-content");
+        sidebarContent.innerHTML = '<div class="loading">Loading recent entries...</div>';
+        
+        const featureLayer = webmap.layers.find(layer => layer.type === "feature");
+        if (featureLayer) {
+          const query = featureLayer.createQuery();
+          query.returnGeometry = true;
+          query.outFields = ["*"];
+          query.orderByFields = ["date_experienced DESC"];
+          query.num = 10; // Get 10 most recent entries
+
+          featureLayer.queryFeatures(query).then((results) => {
+            displayRecentEntries(results.features);
+          }).catch((error) => {
+            console.error('Error loading entries:', error);
+            document.getElementById("sidebar-content").innerHTML = 
+              '<div class="loading">❌ Unable to load recent entries. Please try again.</div>';
+          });
+        }
+      };
+
+      // Function to display recent entries in sidebar
+      function displayRecentEntries(features) {
+        const sidebarContent = document.getElementById("sidebar-content");
+        
+        if (features.length === 0) {
+          sidebarContent.innerHTML = '<div class="loading">🌱 No entries yet. Be the first to share your nature story!</div>';
+          return;
+        }
+
+        let html = '';
+        features.forEach((feature, index) => {
+          const attrs = feature.attributes;
+          const title = attrs.title || `Nature Experience #${index + 1}`;
+          const date = attrs.date_experienced ? new Date(attrs.date_experienced).toLocaleDateString() : 'Date not specified';
+          const description = attrs.description || attrs.what_you_saw || 'No description available';
+          
+          // Truncate description for sidebar display
+          const truncatedDesc = description.length > 100 ? 
+            description.substring(0, 100) + '...' : description;
+
+          html += `
+            <div class="entry-item" onclick="goToEntry(${feature.geometry.longitude}, ${feature.geometry.latitude})" 
+                 title="Click to view this location on the map">
+              <div class="entry-title">${title}</div>
+              <div class="entry-date">${date}</div>
+              <div class="entry-description">${truncatedDesc}</div>
+            </div>
+          `;
+        });
+
+        sidebarContent.innerHTML = html;
+      }
+
+      // Function to navigate to a specific entry
+      window.goToEntry = function(longitude, latitude) {
+        view.goTo({
+          center: [longitude, latitude],
+          zoom: 12
+        });
+        // Close sidebar on mobile
+        if (window.innerWidth <= 600) {
+          const sidebar = document.getElementById("sidebar");
+          const toggleButton = document.getElementById("sidebar-toggle");
+          sidebar.classList.remove("open");
+          toggleButton.classList.remove("sidebar-open");
+        }
+      };
+
+      // Function to toggle sidebar
+      window.toggleSidebar = function() {
+        const sidebar = document.getElementById("sidebar");
+        const toggleButton = document.getElementById("sidebar-toggle");
+        
+        sidebar.classList.toggle("open");
+        toggleButton.classList.toggle("sidebar-open");
+      };
+
+      // Welcome modal functions
+      window.closeWelcomeModal = function(dontShowAgain = false) {
+        document.getElementById("welcome-modal").style.display = "none";
+        if (dontShowAgain) {
+          localStorage.setItem("hideWelcomeModal", "true");
+        }
+      };
+
+      // Check if welcome modal should be shown
+      if (!localStorage.getItem("hideWelcomeModal")) {
+        // Show modal after a brief delay
+        setTimeout(() => {
+          document.getElementById("welcome-modal").style.display = "flex";
+        }, 1000);
+      } else {
+        document.getElementById("welcome-modal").style.display = "none";
+      }
+
+      // Add keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Press 'S' to toggle sidebar
+        if (e.key === 's' || e.key === 'S') {
+          if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+            e.preventDefault();
+            window.toggleSidebar();
+          }
+        }
+        
+        // Press 'Escape' to close modal or sidebar
+        if (e.key === 'Escape') {
+          const modal = document.getElementById("welcome-modal");
+          const sidebar = document.getElementById("sidebar");
+          
+          if (modal.style.display === "flex") {
+            window.closeWelcomeModal();
+          } else if (sidebar.classList.contains("open")) {
+            window.toggleSidebar();
+          }
+        }
+        
+        // Press 'H' to show help modal again
+        if (e.key === 'h' || e.key === 'H') {
+          if (!e.ctrlKey && !e.altKey && !e.metaKey) {
+            e.preventDefault();
+            document.getElementById("welcome-modal").style.display = "flex";
+          }
+        }
+      });
+
+      // Add visual feedback for button interactions
+      const buttons = document.querySelectorAll('button, .addRecordBtn');
+      buttons.forEach(button => {
+        button.addEventListener('mousedown', function() {
+          this.style.transform = 'scale(0.95)';
+        });
+        
+        button.addEventListener('mouseup', function() {
+          this.style.transform = '';
+        });
+        
+        button.addEventListener('mouseleave', function() {
+          this.style.transform = '';
         });
       });
     });
@@ -170,7 +659,49 @@
 </head>
 
 <body>
-  <a href="https://arcg.is/4qSHW" target="_blank" class="addRecordBtn">Add Record</a>
+  <!-- Welcome Modal -->
+  <div id="welcome-modal">
+    <div id="welcome-content">
+      <div class="modal-header">Welcome to My Nature Diary!</div>
+      <div class="modal-content">
+        <p><strong>📖 Share your nature experiences with the world!</strong></p>
+        <p><strong>How to use this app:</strong></p>
+        <ul>
+          <li>🌍 <strong>Explore the map</strong> - Use the search tool, change basemaps, or your location button</li>
+          <li>📝 <strong>Add your story</strong> - Click "Add Record" to document your nature experience</li>
+          <li>📚 <strong>Read others' stories</strong> - Click on points or use the Recent Entries sidebar</li>
+          <li>🖼️ <strong>Attach photos</strong> - Upload pictures to make your story come alive</li>
+        </ul>
+        <p><strong>⌨️ Keyboard shortcuts:</strong></p>
+        <ul>
+          <li><strong>S</strong> - Toggle Recent Stories sidebar</li>
+          <li><strong>H</strong> - Show this help again</li>
+          <li><strong>Esc</strong> - Close modals or sidebar</li>
+        </ul>
+        <p>Your experiences help others discover the beauty of nature!</p>
+      </div>
+      <div class="modal-buttons">
+        <button class="modal-btn" onclick="closeWelcomeModal()">Get Started</button>
+        <button class="modal-btn secondary" onclick="closeWelcomeModal(true)">Don't show again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div id="sidebar-header">
+      Recent Nature Stories
+      <button onclick="loadRecentEntries()" style="float: right; background: none; border: none; color: white; cursor: pointer; font-size: 16px;" title="Refresh entries">🔄</button>
+    </div>
+    <div id="sidebar-content">
+      <div class="loading">Loading recent entries...</div>
+    </div>
+  </div>
+
+  <!-- Sidebar Toggle Button -->
+  <button id="sidebar-toggle" onclick="toggleSidebar()" title="Toggle Recent Stories (Press S)">📚 Recent Stories</button>
+
+  <a href="https://arcg.is/4qSHW" target="_blank" class="addRecordBtn" title="Share your nature experience with the world">Add Your Story</a>
   <div id="searchDiv"></div>
   <div id="viewDiv"></div>
   <div id="coords">Lon: 0.0000 | Lat: 0.0000</div>
